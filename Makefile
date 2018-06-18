@@ -8,5 +8,4 @@ install:
 	mkdir -p $(PREFIX)
 	rsync -a etc $(PREFIX)
 	rsync -a sbin $(PREFIX)
-	mkfifo -m 600 $(PREFIX)${FIFODIR}
 
