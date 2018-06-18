@@ -1,12 +1,12 @@
-bindir ?= /bin
-PREFIX ?= /
-FIFODIR = /etc/s6-exherbo/run-image/service/s6-svscan-log/fifo
+DESTDIR ?= /
+BINDIR ?= /bin
 
 all:
 	true
 
 install:
-	mkdir -p $(PREFIX)
-	rsync -a etc $(PREFIX)
-	cp -r bin/* $(PREFIX)$(bindir)
+	mkdir -p $(DESTDIR)
+	rsync -a etc $(DESTDIR)
+	mkdir -p $(DESTDIR)$(BINDIR)
+	cp -r bin/* $(DESTDIR)$(BINDIR)
 
