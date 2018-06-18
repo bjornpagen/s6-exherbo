@@ -1,8 +1,12 @@
-DESTDIR ?= /
+PREFIX ?= /
+FIFODIR = /etc/s6-exherbo/run-image/service/s6-svscan-log/fifo
+
+all:
+	true
 
 install:
-	mkdir -p $(DESTDIR)
-	rsync -a etc $(DESTDIR)
-	rsync -a sbin $(DESTDIR)
+	mkdir -p $(PREFIX)
+	rsync -a etc $(PREFIX)
+	rsync -a sbin $(PREFIX)
+	mkfifo -m 600 $(PREFIX)${FIFODIR}
 
-.PHONY: install
