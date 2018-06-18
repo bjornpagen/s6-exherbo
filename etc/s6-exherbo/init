@@ -11,7 +11,7 @@ umask 022
 if { "/etc/s6-exherbo"/banner }
 
 # mount tempfs on /run
-if { s6-mount -nt tempfs -o rw,nosuid,nodev,mode=07555 tmpfs "/run" }
+if { s6-mount -nwt tmpfs -o rw,nosuid,nodev,mode=07555 tmpfs "/run" }
 
 # populate initial scan directory
 if { s6-hiercopy "/etc/s6-exherbo"/run-image "/run" }
