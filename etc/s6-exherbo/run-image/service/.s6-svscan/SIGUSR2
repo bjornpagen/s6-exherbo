@@ -1,0 +1,6 @@
+#!/bin/execlineb -P
+
+# halt - terminate, then halt the machine
+foreground { "/etc/s6-exherbo/rc.shutdown" }
+s6-svscanctl -0 -- "/run"/service
+

@@ -1,0 +1,11 @@
+#!/bin/execlineb -S0
+
+cd /
+redirfd -w 2 /dev/console
+fdmove -c 1 2
+foreground { s6ssvc -X -- "/run"/service/s6-svscan-log }
+unexport ?
+wait -r -- { }
+
+foreground { "/etc/s6-exherbo/rc.shutdown" ${@} }
+

@@ -1,0 +1,38 @@
+#!/bin/execlineb -P
+# s6 policy for exherbo
+
+# initial environment
+export PATH "/usr/bin:/usr/sbin/:/bin:/sbin"
+cd /
+s6-setsid -qb --
+umask 022
+
+# welcome banner
+if { "/etc/s6-exherbo"/banner }
+
+# mount tempfs on /run
+if { s6-mount -nt tempfs -o rw,nosuid,nodev,mode=07555 tmpfs "/run" }
+
+# populate initial scan directory
+if { s6-hiercopy "/etc/s6-exherbo"/run-image "/run" }
+
+# redirect logging
+redirfd -r 0 /dev/null
+redirfd -wnb 1 "/run"/service/s6-svscan-log/fifo
+fdmove -c 2 1
+
+# setup final environment
+emptyenv -p
+s6-envdir -I -- "/etc/s6-exherbo"/env
+
+# begin supervision
+background {
+    s6-setsid --
+    redirfd -w 1 "/run"/service/s6-svscan-log/fifo
+    "/etc/s6-exherbo"/rc.init
+}
+unexport !
+
+cd "/run"/service
+s6-svscan -st0
+

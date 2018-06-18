@@ -1,0 +1,15 @@
+#!/bin/execlineb -P
+# s6 policy for exherbo
+
+# load system specific configuration
+background { "/etc/s6-exherbo"/rc.conf }
+
+# start s6-rc service manager
+if { s6-rc-init "/run"/service }
+if { s6-rc exherbo.sysint }
+
+# redir logging
+redirfd -r 0 /dev/console
+redirfd -w 1 /dev/console
+fdmove -c 2 1
+

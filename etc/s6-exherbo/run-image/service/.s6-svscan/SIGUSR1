@@ -1,0 +1,6 @@
+#!/bin/execlineb -P
+
+# poweroff - terminate, then power off the machine
+foreground { "/etc/s6-exherbo/rc.shutdown" }
+s6-svscanctl -7 -- "/run"/service
+

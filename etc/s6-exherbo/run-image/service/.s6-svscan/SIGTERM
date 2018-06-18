@@ -1,0 +1,6 @@
+#!/bin/execlineb -P
+
+# terminate - send SIGTERM to all supervised services, SIGHUP to all supervised loggers, then finish
+foreground { "/etc/s6-exherbo/rc.shutdown" }
+s6-svscanctl -t -- "/run"/service
+
