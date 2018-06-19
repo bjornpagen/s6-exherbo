@@ -7,5 +7,5 @@ foreground { s6ssvc -X -- "/run"/service/s6-svscan-log }
 unexport ?
 wait -r -- { }
 
-foreground { "/etc/s6-exherbo/rc.shutdown" ${@} }
+"/etc/s6-exherbo/rc.shutdown" ${@}
 

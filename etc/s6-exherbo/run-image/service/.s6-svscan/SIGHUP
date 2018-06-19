@@ -1,6 +1,6 @@
 #!/bin/execlineb -P
 
 # hangup = kill all supervised processes then finish
-foreground { "/etc/s6-exherbo/rc.shutdown" }
+foreground { s6-rc -da change }
 s6-svscanctl -h -- "/run"/service
 

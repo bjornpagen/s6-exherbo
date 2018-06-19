@@ -1,6 +1,6 @@
 #!/bin/execlineb -P
 
 # quit - send all processes SIGTERM then finish
-foreground { "/etc/s6-exherbo/rc.shutdown" }
+foreground { s6-rc -da change }
 s6-svscanctl -q -- "/run"/service
 

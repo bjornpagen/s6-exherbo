@@ -1,6 +1,6 @@
 #!/bin/execlineb -P
 
 # interrupt - teboot
-foreground { "/etc/s6-exherbo/rc.shutdown" }
+foreground { s6-rc -da change }
 s6-svscanctl -6 -- "/run"/service
 
