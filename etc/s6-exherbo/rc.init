@@ -20,10 +20,6 @@ if {
     foreground { s6-echo ">>> Bringing up "exherbo.sysint" bundle" }
     if { s6-rc -u exherbo.sysint }
 
-# bring up service tree, starting with exherbo.sysint
-foreground { s6-echo ">>> Bringing up "exherbo.sysint" bundle\n" }
-if { if {
-        s6-rc -u exherbo.sysint }
     # done rc.init
     foreground { s6-echo "\033[35;1m===\033[0m Done ${FILEDIR}/rc.init" }
 }
