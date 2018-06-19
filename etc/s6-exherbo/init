@@ -7,7 +7,7 @@ define SCANDIR    "/run"
 define PATH       "/usr/bin:/usr/sbin/:/bin:/sbin"
 
 # welcome banner
-if { ${FILEDIR}/banner }
+foreground { ${FILEDIR}/banner }
 
 # start init
 foreground { s6-echo "\033[35;1m===\033[0m Starting ${FILEDIR}/init" }
@@ -17,7 +17,7 @@ foreground { s6-echo ">>> Setting PATH as ${PATH}" }
 export PATH ${PATH}
 
 # script setup
-foreground { s6-echo ">>> Change directory to /" }
+foreground { s6-echo ">>> Changing directory to /" }
 cd /
 s6-setsid -qb --
 umask 022
@@ -46,11 +46,11 @@ unexport !
 foreground { s6-echo ">>> Changing directory to ${SCANDIR}/service" }
 cd ${SCANDIR}/service
 
-# tell user we are starting s6-svscan before we redirect logs
-foreground { s6-echo ">>> Starting s6-svscan" }
-
 # done init
 background { s6-echo "\033[35;1m===\033[0m Done ${FILEDIR}/init" }
+
+# tell user we are starting s6-svscan before we redirect logs
+foreground { s6-echo ">>> Starting s6-svscan" }
 
 # redir logging
 redirfd -r 0 /dev/null
