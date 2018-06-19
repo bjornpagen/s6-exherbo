@@ -39,7 +39,6 @@ s6-envdir -I -- ${FILEDIR}/env
 foreground { s6-echo ">>> Background into ${FILEDIR}/rc.init" }
 background {
     s6-setsid --
-    redirfd -w 1 ${SCANDIR}/service/s6-svscan-log/fifo
     ${FILEDIR}/rc.init
 }
 unexport !
@@ -47,18 +46,15 @@ unexport !
 foreground { s6-echo ">>> Changing directory to ${SCANDIR}/service" }
 cd ${SCANDIR}/service
 
-# done init
-background { s6-echo "\033[35;1m===\033[0m Done ${FILEDIR}/init" }
-
 # tell user we are starting s6-svscan before we redirect logs
 foreground { s6-echo ">>> Starting s6-svscan" }
 
+# done init
+background { s6-echo "\033[35;1m===\033[0m Done ${FILEDIR}/init" }
+
 # redir logging
-foreground { s6-echo ">>> Redirecting stdin to /dev/null" }
 redirfd -r 0 /dev/null
-foreground { s6-echo ">>> Merging stderr into stdout" }
 fdmove -c 2 1
-foreground { s6-echo ">>> Redirecting stdout to ${SCANDIR}/service/s6-svscan-log/fifo" }
 redirfd -wnb 1 ${SCANDIR}/service/s6-svscan-log/fifo
 
 # start PID 1 supervisor
