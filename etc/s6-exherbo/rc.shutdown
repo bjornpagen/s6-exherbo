@@ -1,15 +1,28 @@
 #!/bin/execlineb -S0
 
-foreground { s6-echo "Syncing disks." }
+# setup variables
+define FILEDIR    "/etc/s6-exherbo"
+define SCANDIR    "/run"
+
+# start rc.shutdown
+foreground { s6-echo "\033[35;1m===\033[0m Starting ${FILEDIR}/rc.shutdown" }
+
+foreground { s6-echo ">>> Syncing disks" }
 foreground { s6-sync }
-foreground { s6-echo "Sending all processes the TERM signal." }
+foreground { s6-echo ">>> Sending all processes the TERM signal" }
 foreground { s6-nuke -th }
 s6-sleep -m -- 2000
-foreground { s6-echo "Sending all processes the KILL signal." }
+foreground { s6-echo ">>> Sending all processes the KILL signal" }
 foreground { s6-nuke -k }
 wait { }
-foreground { s6-echo "Unmounting disks." }
+foreground { s6-echo ">>> Unmounting disks" }
 foreground { s6-umount -a }
 foreground { s6-mount -ro remount /dev/root / }
+
+# execute corresponding s6 system command
+foreground { s6-echo ">>> Executing s6-${1} -f" }
 s6-${1} -f
+
+# done rc.shutdown
+s6-echo "\033[35;1m===\033[0m Done ${FILEDIR}/rc.shutdown"
 

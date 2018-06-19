@@ -1,4 +1,5 @@
 #!/bin/execlineb -P
 # s6 policy for exherbo
 
-s6-echo "\n\033[35;1m ===\033[0m Booting Exherbo Linux...\n\n"
+s6-echo "\n\033[35;1m===\033[0m Booting Exherbo Linux...\n\n"
+

@@ -1,15 +1,45 @@
 #!/bin/execlineb -P
 # s6 policy for exherbo
 
+# setup variables
+define FILEDIR    "/etc/s6-exherbo"
+define SCANDIR    "/run"
+
+# begin rc.init
+foreground { s6-echo "\033[35;1m===\033[0m Starting ${FILEDIR}/rc.init" }
+
 # load system specific configuration
-background { "/etc/s6-exherbo"/rc.conf }
+background { ${FILEDIR}/rc.conf }
 
 # start s6-rc service manager
-if { s6-rc-init "/run"/service }
-if { s6-rc -u exherbo.sysint }
+if {
+    foreground { s6-echo ">>> Starting s6-rc-init in ${SCANDIR}/service" }
+    if { s6-rc-init ${SCANDIR}/service }
 
-# redir logging
+    # bring up service tree, starting with exherbo.sysint
+    foreground { s6-echo ">>> Bringing up "exherbo.sysint" bundle" }
+    if { s6-rc -u exherbo.sysint }
+
+# bring up service tree, starting with exherbo.sysint
+foreground { s6-echo ">>> Bringing up "exherbo.sysint" bundle\n" }
+if { if {
+        s6-rc -u exherbo.sysint }
+    # done rc.init
+    foreground { s6-echo "\033[35;1m===\033[0m Done ${FILEDIR}/rc.init" }
+}
+
+# something failed, redir logging so user can read
+foreground { s6-echo -- "--- Redirecting stdin to /dev/console" }
 redirfd -r 0 /dev/console
+foreground { s6-echo -- "--- Redirecting stdout to /dev/console" }
 redirfd -w 1 /dev/console
+foreground { s6-echo -- "--- Merging stderr into stdout" }
 fdmove -c 2 1
+
+foreground {
+    if { s6-echo "\033[31;1m***\033[0m Something went wrong bringing up "exherbo.sysint" bundle" }
+    s6-echo "\033[31;1m***\033[0m Spawning an interactive shell..."
+}
+
+sh -i
 
