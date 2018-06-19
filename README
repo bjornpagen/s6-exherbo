@@ -1,2 +1,24 @@
-* policy for s6/s6-rc on Exherbo
+# Policy for s6/s6-rc on Exherbo
 Licensed under the terms of the Zero Clause BSD License
+
+## Goals:
+
+- Paludis
+
+s6-exherbo sole purpose is to provide an automated way for paludis to interact
+with service management via exlibs. Not done yet.
+
+- Mimic upstream/adhere to UNIXisms
+
+This means that we keep naming conventions like rc.*, and we keep the same
+names for files/dirs as s6-linux-init defines them to be.
+
+- Stay user-configurable
+
+We keep most files in /etc, because regardless of whether it is a good idea
+or not, changing s6-exherbo files should be hassle-free.
+
+- Stay s6
+
+Avoid using tools like sh/coreutils. POSIX is great, but s6-* is better.
+
