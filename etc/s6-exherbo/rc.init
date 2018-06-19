@@ -5,6 +5,9 @@
 define FILEDIR    "/etc/s6-exherbo"
 define SCANDIR    "/run"
 
+# redir stdout
+redirfd -w 1 /dev/console
+
 # begin rc.init
 foreground { s6-echo "\033[35;1m===\033[0m Starting ${FILEDIR}/rc.init" }
 
@@ -12,12 +15,12 @@ foreground { s6-echo "\033[35;1m===\033[0m Starting ${FILEDIR}/rc.init" }
 background { ${FILEDIR}/rc.conf }
 
 # start s6-rc service manager
-if {
-    foreground { s6-echo ">>> Starting s6-rc-init in ${SCANDIR}/service" }
+if -n {
+    foreground { s6-echo -- "--- Starting s6-rc-init in ${SCANDIR}/service" }
     if { s6-rc-init ${SCANDIR}/service }
 
     # bring up service tree, starting with exherbo.sysint
-    foreground { s6-echo ">>> Bringing up "exherbo.sysint" bundle" }
+    foreground { s6-echo -- "--- Bringing up "exherbo.sysint" bundle" }
     if { s6-rc -u exherbo.sysint }
 
     # done rc.init
@@ -27,8 +30,6 @@ if {
 # something failed, redir logging so user can read
 foreground { s6-echo -- "--- Redirecting stdin to /dev/console" }
 redirfd -r 0 /dev/console
-foreground { s6-echo -- "--- Redirecting stdout to /dev/console" }
-redirfd -w 1 /dev/console
 foreground { s6-echo -- "--- Merging stderr into stdout" }
 fdmove -c 2 1
 

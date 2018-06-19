@@ -13,11 +13,11 @@ if { ${FILEDIR}/banner }
 foreground { s6-echo "\033[35;1m===\033[0m Starting ${FILEDIR}/init" }
 
 # initial environment
-foreground { s6-echo -- "--- Setting PATH as ${PATH}" }
+foreground { s6-echo ">>> Setting PATH as ${PATH}" }
 export PATH ${PATH}
 
 # script setup
-foreground { s6-echo -- "--- Change directory to /" }
+foreground { s6-echo ">>> Change directory to /" }
 cd /
 s6-setsid -qb --
 umask 022
@@ -30,16 +30,8 @@ if { s6-mount -nwt tmpfs -o rw,nosuid,nodev,mode=07555 tmpfs ${SCANDIR} }
 foreground { s6-echo ">>> Populating ${SCANDIR} with ${FILEDIR}/run-image" }
 if { s6-hiercopy ${FILEDIR}/run-image ${SCANDIR} }
 
-# redir logging
-foreground { s6-echo -- "--- Redirecting stdin to /dev/null" }
-redirfd -r 0 /dev/null
-foreground { s6-echo -- "--- Redirecting stdout to ${SCANDIR}/service/s6-svscan-log/fifo" }
-redirfd -wnb 1 ${SCANDIR}/service/s6-svscan-log/fifo
-foreground { s6-echo -- "--- Merging stderr into stdout" }
-fdmove -c 2 1
-
 # setup final environment
-foreground { s6-echo -- "--- Sourcing env from ${FILEDIR}/env" }
+foreground { s6-echo ">>> Sourcing env from ${FILEDIR}/env" }
 emptyenv -p
 s6-envdir -I -- ${FILEDIR}/env
 
@@ -52,13 +44,23 @@ background {
 }
 unexport !
 
-foreground { s6-echo -- "--- Change directory to ${SCANDIR}/service" }
+foreground { s6-echo ">>> Changing directory to ${SCANDIR}/service" }
 cd ${SCANDIR}/service
 
 # done init
 background { s6-echo "\033[35;1m===\033[0m Done ${FILEDIR}/init" }
 
-# start PID 1 supervisor
+# tell user we are starting s6-svscan before we redirect logs
 foreground { s6-echo ">>> Starting s6-svscan" }
+
+# redir logging
+foreground { s6-echo ">>> Redirecting stdin to /dev/null" }
+redirfd -r 0 /dev/null
+foreground { s6-echo ">>> Merging stderr into stdout" }
+fdmove -c 2 1
+foreground { s6-echo ">>> Redirecting stdout to ${SCANDIR}/service/s6-svscan-log/fifo" }
+redirfd -wnb 1 ${SCANDIR}/service/s6-svscan-log/fifo
+
+# start PID 1 supervisor
 s6-svscan -st0
 
