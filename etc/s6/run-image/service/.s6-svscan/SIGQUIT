@@ -2,5 +2,5 @@
 
 # quit - send all processes SIGTERM then finish
 foreground { s6-rc -da change }
-s6-svscanctl -q -- "/run"/service
+s6-svscanctl -q -- /run/service
 

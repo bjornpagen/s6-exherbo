@@ -4,5 +4,5 @@ redirfd -w 1 /dev/console
 fdmove -c 2 1
 redirfd -rnb 0 fifo
 s6-applyuidgid -u 0 -g 0 --
-s6-log -bp -- t "/run"/uncaught-logs
+s6-log -bp -- t /run/uncaught-logs
 

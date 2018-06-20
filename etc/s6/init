@@ -1,0 +1,58 @@
+#!/bin/execlineb -P
+# s6 policy for exherbo
+
+# welcome banner
+foreground { /etc/s6/banner }
+
+# start init
+foreground { s6-echo -- "\033[35;1m===\033[0m Starting /etc/s6/init" }
+
+# initial environment
+define PATH "/usr/bin:/usr/sbin/:/bin:/sbin"
+foreground { s6-echo -- ">>> Setting PATH as ${PATH}" }
+export PATH ${PATH}
+
+# script setup
+foreground { s6-echo -- ">>> Changing directory to /" }
+cd /
+s6-setsid -qb --
+umask 022
+
+# mount tmpfs
+foreground { s6-echo -- ">>> Mounting tmpfs on /run" }
+if { s6-mount -nwt tmpfs -o rw,nosuid,nodev,mode=07555 tmpfs /run }
+
+# populate initial scan directory
+foreground { s6-echo -- ">>> Populating /run with /etc/s6/run-image" }
+if { s6-hiercopy /etc/s6/run-image /run }
+
+# setup final environment
+foreground { s6-echo -- ">>> Sourcing env from /etc/s6/env" }
+emptyenv -p
+s6-envdir -I -- /etc/s6/env
+
+# begin supervision
+foreground { s6-echo -- ">>> Background into /etc/s6/rc.init" }
+background {
+    s6-setsid --
+    /etc/s6/rc.init
+}
+unexport !
+
+foreground { s6-echo -- ">>> Changing directory to /run/service" }
+cd /run/service
+
+# tell user we are starting s6-svscan before we redirect logs
+foreground { s6-echo -- ">>> Starting s6-svscan" }
+
+# done init
+foreground { s6-echo -- "\033[35;1m===\033[0m Done /etc/s6/init" }
+
+# redir logging
+redirfd -r 0 /dev/null
+fdmove -c 2 1
+redirfd -wnb 1 /run/service/s6-svscan-log/fifo
+
+# start PID 1 supervisor
+s6-svscan -st0
+

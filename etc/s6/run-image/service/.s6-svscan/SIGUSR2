@@ -2,5 +2,5 @@
 
 # halt - terminate, then halt the machine
 foreground { s6-rc -da change }
-s6-svscanctl -0 -- "/run"/service
+s6-svscanctl -0 -- /run/service
 

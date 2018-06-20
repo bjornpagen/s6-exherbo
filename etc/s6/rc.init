@@ -1,0 +1,32 @@
+#!/bin/execlineb -P
+# s6 policy for exherbo
+
+# begin rc.init
+foreground { s6-echo -- "\033[35;1m===\033[0m Starting /etc/s6/rc.init" }
+
+# load system specific configuration
+foreground { s6-echo -- "--- Background into /etc/s6/rc.conf" }
+background { /etc/s6/rc.conf }
+
+# start s6-rc service manager
+if -n {
+    foreground { s6-echo -- "--- Starting s6-rc-init in /run/service" }
+    if { s6-rc-init /run/service }
+
+    # bring up service tree, starting with exherbo.sysint
+    foreground { s6-echo -- "--- Bringing up exherbo.sysint bundle" }
+    if { s6-rc -u exherbo.sysint }
+
+    # done rc.init
+    foreground { s6-echo -- "\033[35;1m===\033[0m Done /etc/s6/rc.init" }
+}
+
+# something has gone wrong, since we escaped the if block
+foreground {
+    if { s6-echo --
+        "\n\033[31;1m***\033[0m Something went wrong starting s6-rc" }
+    s6-echo -- "\033[31;1m***\033[0m Spawning an interactive shell...\n"
+}
+
+sh -i
+

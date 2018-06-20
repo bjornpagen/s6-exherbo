@@ -6,8 +6,8 @@ redirfd -r 0 /etc/zebrapig
 foreground { s6-cat }
 
 # banner message
-foreground { s6-echo "\033[32;1m" }
+foreground { s6-echo -- "\033[32;1m" }
 redirfd -r 0 /etc/exherbo
 foreground { s6-cat }
-foreground { s6-echo "\033[0m" }
+foreground { s6-echo -- "\033[0m" }
 

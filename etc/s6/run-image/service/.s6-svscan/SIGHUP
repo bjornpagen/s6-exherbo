@@ -2,5 +2,5 @@
 
 # hangup = kill all supervised processes then finish
 foreground { s6-rc -da change }
-s6-svscanctl -h -- "/run"/service
+s6-svscanctl -h -- /run/service
 

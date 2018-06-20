@@ -2,5 +2,5 @@
 
 # poweroff - terminate, then power off the machine
 foreground { s6-rc -da change }
-s6-svscanctl -7 -- "/run"/service
+s6-svscanctl -7 -- /run/service
 

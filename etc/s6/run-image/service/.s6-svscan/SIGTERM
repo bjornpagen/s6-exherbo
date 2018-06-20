@@ -2,5 +2,5 @@
 
 # terminate - send SIGTERM to all supervised services, SIGHUP to all supervised loggers, then finish
 foreground { s6-rc -da change }
-s6-svscanctl -t -- "/run"/service
+s6-svscanctl -t -- /run/service
 
