@@ -27,8 +27,8 @@ if -n {
 
 # something has gone wrong, since we escaped the if block
 foreground {
-    if { s6-echo "\033[31;1m***\033[0m Something went wrong starting s6-rc" }
-    s6-echo "\033[31;1m***\033[0m Spawning an interactive shell..."
+    if { s6-echo "\n\033[31;1m***\033[0m Something went wrong starting s6-rc" }
+    s6-echo "\033[31;1m***\033[0m Spawning an interactive shell...\n"
 }
 
 sh -i

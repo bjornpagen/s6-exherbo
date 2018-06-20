@@ -9,5 +9,5 @@ redirfd -r 0 ${FILEDIR}/zebrapig
 foreground { s6-cat }
 
 # banner message
-s6-echo "\n\033[35;1m===\033[0m Booting Exherbo Linux...\n"
+s6-echo "\n\033[32;1mBooting Exherbo Linux...\033[0m\n"
 
