@@ -21,8 +21,9 @@ foreground { s6-mount -ro remount /dev/root / }
 
 # execute corresponding s6 system command
 foreground { s6-echo ">>> Executing s6-${1} -f" }
-s6-${1} -f
 
 # done rc.shutdown
-s6-echo "\033[35;1m===\033[0m Done ${FILEDIR}/rc.shutdown"
+foreground { s6-echo "\033[35;1m===\033[0m Done ${FILEDIR}/rc.shutdown" }
+
+s6-${1} -f
 
