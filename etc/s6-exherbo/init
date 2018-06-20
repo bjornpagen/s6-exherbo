@@ -46,11 +46,11 @@ unexport !
 foreground { s6-echo ">>> Changing directory to ${SCANDIR}/service" }
 cd ${SCANDIR}/service
 
-# done init
-background { s6-echo "\033[35;1m===\033[0m Done ${FILEDIR}/init" }
-
 # tell user we are starting s6-svscan before we redirect logs
 foreground { s6-echo ">>> Starting s6-svscan" }
+
+# done init
+background { s6-echo "\033[35;1m===\033[0m Done ${FILEDIR}/init" }
 
 # redir logging
 redirfd -r 0 /dev/null
