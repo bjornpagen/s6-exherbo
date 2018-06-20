@@ -1,13 +1,13 @@
 #!/bin/execlineb -P
 # s6 policy for exherbo
 
-# setup variables
-define FILEDIR    "/etc/s6-exherbo"
-
 # cat zebrapig
-redirfd -r 0 ${FILEDIR}/zebrapig
+redirfd -r 0 /etc/zebrapig
 foreground { s6-cat }
 
 # banner message
-s6-echo "\n\033[32;1mBooting Exherbo Linux...\033[0m\n"
+foreground { s6-echo "\033[32;1m" }
+redirfd -r 0 /etc/exherbo
+foreground { s6-cat }
+foreground { s6-echo "\033[0m" }
 
