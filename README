@@ -22,3 +22,12 @@ or not, changing s6-exherbo files should be hassle-free.
 
 Avoid using tools like sh/coreutils. POSIX is great, but s6-* is better.
 
+## Damn it, why do you bundle in your own zebrapig?
+
+I will remove it if there is at least one complaint about it, which I
+have not gotten yet. I like UTF-8 zebrapigs.
+
+## Thanks!
+
+Thanks a lot to somasis and obarun for inspiration!
+
