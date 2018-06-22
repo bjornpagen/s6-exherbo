@@ -1,2 +1,16 @@
 #!/bin/execlineb -P
+
+fdmove -c 1 2
+
+# begin 00 up
+foreground { s6-echo -- "\033[35;1m===\033[0m Starting 00 up" }
+
+# set hostname
 s6-hostname localhost
+
+# set keymap
+loadkeys us
+
+# done 00 up
+foreground { s6-echo -- "\033[35;1m===\033[0m Done 00 up" }
+
