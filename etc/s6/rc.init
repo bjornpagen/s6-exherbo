@@ -13,9 +13,9 @@ if -n {
     foreground { s6-echo -- "--- Starting s6-rc-init in /run/service" }
     if { s6-rc-init /run/service }
 
-    # bring up service tree, starting with exherbo.sysint
-    foreground { s6-echo -- "--- Bringing up exherbo.sysint bundle" }
-    if { s6-rc -u exherbo.sysint }
+    # bring up service tree, starting with ok-all
+    foreground { s6-echo -- "--- Bringing up ok-all bundle" }
+    if { s6-rc -u ok-all }
 
     # done rc.init
     foreground { s6-echo -- "\033[35;1m===\033[0m Done /etc/s6/rc.init" }
