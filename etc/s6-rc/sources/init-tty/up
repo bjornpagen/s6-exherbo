@@ -1,0 +1,28 @@
+#!/bin/execlineb -P
+
+foreground { fdmove -c 1 2 s6-echo "Starting init-tty" }
+
+s6-envdir /etc/s6/env/tty
+multisubstitute
+{
+    importas -i encoding encoding
+    importas -i font font
+    importas -i kbd kbd
+    importas -is keymap keymap
+    importas -i loglevel loglevel
+    importas -is ttys ttys
+}
+
+if
+{
+    forx -po 0 tty { ${ttys} }
+    importas -i tty tty
+
+    if { redirfd -w 1 /dev/${tty} s6-echo -n "\0x1b%${encoding}" }
+    if { setfont ${font} -C /dev/${tty} }
+    if { kbd_mode -${kbd} -C /dev/${tty} }
+}
+
+if { loadkeys -q ${keymap} }
+if { ctrlaltdel soft }
+if { dmesg -n ${loglevel} }

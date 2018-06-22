@@ -1,0 +1,5 @@
+#!/bin/execlineb -P
+
+foreground { fdmove -c 1 2 s6-echo "Starting mount-rwfs" }
+
+mount -o remount,rw,discard /

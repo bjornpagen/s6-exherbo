@@ -1,0 +1,5 @@
+#!/bin/execlineb -P
+
+foreground { fdmove -c 1 2 s6-echo "Starting init-loop" }
+
+if { ifconfig lo 127.0.0.1 netmask 255.0.0.0 }
